@@ -1,0 +1,11 @@
+{
+    "name": "kodeio/file-cache",
+	"license": "MIT", 
+    "author": {
+        "name": "Ali Hasan",
+        "email": "ali.h.bd@outlook.com"
+    },
+    "autoload": {
+        "psr-4" : {"Kodeio\\FileCache\\" : "src"}
+    }
+}
