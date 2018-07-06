@@ -2,7 +2,7 @@
 
 namespace Kodeio\FileCache;
 
-class fCache_Helper
+abstract class fCache_Helper
 {
 	protected $cDir, $file, $id, $hour;
 	
