@@ -45,9 +45,13 @@ class fCache extends fCache_Helper
 	
 	public function delete($recId=null)
 	{
-		if(null !== $this->file){
-			if(null === $recId) $recId = $this->id;
-			return unlink($this->fname($recId));
+		if(null == $recId){
+			$recId = @$this->id;
+		}
+		if($file = $this->fname($recId)){
+			if(true == is_file($file)){
+				return unlink($file);
+			}
 		}
 		return null;
 	}
