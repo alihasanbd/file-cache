@@ -49,7 +49,7 @@ class fCache extends fCache_Helper
 			$recId = @$this->id;
 		}
 		if($file = $this->fname($recId)){
-			if(true == is_file($file)){
+			if(true == file_exists($file)){
 				return unlink($file);
 			}
 		}
