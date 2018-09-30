@@ -6,6 +6,7 @@
         "email": "ali.h.bd@outlook.com"
     },
     "autoload": {
-        "psr-4" : {"Kodeio\\FileCache\\" : "src"}
+        "psr-4" : {"Kodeio\\FileCache\\" : "src"},
+		"files": ["src/FileCache.php"]
     }
 }

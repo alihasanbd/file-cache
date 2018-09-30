@@ -5,9 +5,9 @@ namespace Kodeio\FileCache;
 class fCache extends fCache_Helper
 {	
 	/* Directory & cache period */
-	public function __construct($cacheDir, $hour=24)
+	public function __construct($prefix, $hour=24)
 	{
-		$this->cDir = $cacheDir; 
+		$this->prefix = $prefix; 
 		$this->hour = $hour;
 	}
 	
