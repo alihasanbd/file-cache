@@ -2,9 +2,11 @@
 
 namespace Kodeio\FileCache;
 
-class fCache extends fCache_Helper
+use Kodeio\FileCache;
+
+class fCache extends FileCache
 {	
-	/* Directory & cache period */
+	/* fife prefix & cache period */
 	public function __construct($prefix, $hour=24)
 	{
 		$this->prefix = $prefix; 
