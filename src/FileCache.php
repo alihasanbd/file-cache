@@ -2,24 +2,26 @@
 
 namespace Kodeio;
 
+use Exception;
+
 class FileCache
 {
-	protected  static $path = null;
+	public static $path, $prefixes = [];
 	protected $file, $id, $hour, $prefix;
 	
 	protected function fname($id)
 	{
-		if(null !== self::$path){
-			$idfr = str_replace('/', '_', $this->prefix) . $id;
-			return rtrim(self::$path, '/') .'/data_'. $idfr .'_obj.fc';
-		}
-		throw new Exception(
-			"FileCache path 'fCache::path' is not set."
-		);
-		return false;
+		if(null == self::$path){
+			throw new Exception(
+				"FileCache path 'Kodeio\FileCache::\$path' is not set."
+			);
+			return false;
+		} 
+		$idfr = str_replace(['/','\\'], '_', $this->prefix) .'_'. $id;
+		return rtrim(self::$path, '/') .'/data_'. $idfr .'_obj.fc';
 	}
 	
-	protected function readFile($file, $del)
+	protected function readCache($file, $del)
 	{
 		$this->file = unserialize(file_get_contents($file));
 		if($del && $this->isExpired()) $this->delete();

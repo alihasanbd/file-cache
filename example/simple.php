@@ -6,7 +6,8 @@ require_once(__DIR__ .'/autoload.php');
 
 use Kodeio\FileCache\fCache;
 
-$cache = new fCache(__DIR__ .'/cache/');
+$cache = new fCache('simple');
+$cache2 = new fCache('simple2');
 
 $cache->set('zf93564yg', ['value' => 100]);
 echo '<pre>';

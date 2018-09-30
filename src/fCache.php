@@ -3,13 +3,20 @@
 namespace Kodeio\FileCache;
 
 use Kodeio\FileCache;
+use Exception;
 
 class fCache extends FileCache
 {	
 	/* fife prefix & cache period */
 	public function __construct($prefix, $hour=24)
 	{
-		$this->prefix = $prefix; 
+		if(in_array($prefix, parent::$prefixes)){
+			throw new Exception(
+				"The prefix '{$prefix}' already in use."
+			);
+		}
+		parent::$prefixes[] = $prefix;
+		$this->prefix = $prefix;
 		$this->hour = $hour;
 	}
 	
@@ -28,7 +35,7 @@ class fCache extends FileCache
 		$file = $this->fname($recId);
 		if(true == file_exists($file)){
 			$this->id = $recId; /* Saving Id */
-			return $this->readFile($file, $del);
+			return $this->readCache($file, $del);
 		}
 		return null;
 	}
