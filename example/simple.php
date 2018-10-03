@@ -11,4 +11,4 @@ $cache2 = new fCache('simple2');
 
 $cache->set('zf93564yg', ['value' => 100]);
 echo '<pre>';
-print_r($cache->get('zf93564yg'));
+print_r($cache->get('zf93564yg', null, false));

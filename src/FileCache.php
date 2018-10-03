@@ -10,8 +10,8 @@ class FileCache
 	protected function fname($id)
 	{ 
 		$table = str_replace(['/','\\'], '_', $this->table);
-		$prefix = (null == $this->prefix)? '_'. $this->prefix:''; 
-		$file = "/data_{$table}{$prefix}_{$id}_obj.fc";
+		$prefix = (null != $this->prefix)? '_'. $this->prefix:''; 
+		$file = "/kdata_{$table}{$prefix}_{$id}_obj.fc";
 		return rtrim(self::$path, '/') . $file;
 	}
 	

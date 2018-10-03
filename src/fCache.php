@@ -4,6 +4,7 @@ namespace Kodeio\FileCache;
 
 use Kodeio\FileCache;
 use Exception; 
+use Closure; 
 
 class fCache extends FileCache
 {
@@ -19,15 +20,15 @@ class fCache extends FileCache
 			$prefixes = [$prefixes];
 		}
 		
-		if($tables = @$prefixes[0]){
-			if(in_array($tables, parent::$tables)){
+		if($table = @$prefixes[0]){
+			if(in_array($table, parent::$tables)){
 				throw new Exception(
-					"The table/prefix '{$tables}' already in use on other model."
+					"The table/prefix '{$table}' already in use."
 				);
 			}
-			parent::$tables[] = $tables;
+			parent::$tables[] = $table;
 			$this->prefix = @$prefixes[1];
-			$this->tables = $tables;
+			$this->table = $table;
 			$this->hour = $hour;
 		}else{
 			throw new Exception(
@@ -37,22 +38,27 @@ class fCache extends FileCache
 	}
 	
 	/* @return - Nr. of char written or FALSE */
-	public function set($recId, $data)
+	public function set(String $recId, $data)
 	{
 		$file = $this->fname($recId);
 		return file_put_contents($file, serialize((object)[
 			'data' => [$data], 'updated_at' => null,
 			'created_at' => strtotime('now'), 
-		]));  
+		]));
 	}
 	
-	public function get($recId, $del=true)
+	public function get(String $recId, Closure $source=null, $del=true)
 	{
 		$file = $this->fname($recId);
 		if(true == file_exists($file)){
 			$this->id = $recId; /* Saving Id */
 			return $this->readCache($file, $del);
-		} 
+		}
+		if(is_object($source) && $source instanceof Closure){
+			$data = $source();
+			$this->set($recId, $data);
+			return $data;
+		}
 		return null;
 	}
 	
