@@ -3,21 +3,37 @@
 namespace Kodeio\FileCache;
 
 use Kodeio\FileCache;
-use Exception;
+use Exception; 
 
 class fCache extends FileCache
-{	
+{
 	/* fife prefix & cache period */
-	public function __construct($prefix, $hour=24)
+	public function __construct($prefixes, $hour=24)
 	{
-		if(in_array($prefix, parent::$prefixes)){
+		if(null == parent::$path){
 			throw new Exception(
-				"The prefix '{$prefix}' already in use."
+				"FileCache path 'Kodeio\FileCache::\$path' is not set."
+			); 
+		}
+		if(false == is_array($prefixes)){
+			$prefixes = [$prefixes];
+		}
+		
+		if($tables = @$prefixes[0]){
+			if(in_array($tables, parent::$tables)){
+				throw new Exception(
+					"The table/prefix '{$tables}' already in use on other model."
+				);
+			}
+			parent::$tables[] = $tables;
+			$this->prefix = @$prefixes[1];
+			$this->tables = $tables;
+			$this->hour = $hour;
+		}else{
+			throw new Exception(
+				"The cache prefix(s) is/are invalid."
 			);
 		}
-		parent::$prefixes[] = $prefix;
-		$this->prefix = $prefix;
-		$this->hour = $hour;
 	}
 	
 	/* @return - Nr. of char written or FALSE */
@@ -30,13 +46,13 @@ class fCache extends FileCache
 		]));  
 	}
 	
-	public function get($recId, $del=false)
+	public function get($recId, $del=true)
 	{
 		$file = $this->fname($recId);
 		if(true == file_exists($file)){
 			$this->id = $recId; /* Saving Id */
 			return $this->readCache($file, $del);
-		}
+		} 
 		return null;
 	}
 	
