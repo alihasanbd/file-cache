@@ -12,13 +12,30 @@ class ClosureTest
 	
 	public function get()
 	{
-		$cache = new fCache('simple');
 		$inst = $this;
+		$cache = new fCache('simple');
 		return $cache->get('ccczf93564yg', function() use($inst){
 			return $inst->data;
+		});
+	}
+	
+	public function pretty(String $recId, Closure $source)
+	{
+		$model = $this;
+		$cache = new fCache('simple');
+		return $cache->get($recId, 
+			function() use($model, $source){
+			return $source($model);
+		});
+	}
+	
+	public function test()
+	{
+		return $this->pretty('ppp1f93564yg', function($self){
+			return $self->data;
 		});
 	}
 }
 
 $cache = new ClosureTest;
-var_dump($cache->get());
+var_dump($cache->test());
