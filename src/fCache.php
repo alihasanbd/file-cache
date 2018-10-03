@@ -9,34 +9,24 @@ use Closure;
 class fCache extends FileCache
 {
 	/* fife prefix & cache period */
-	public function __construct($prefixes, $hour=24)
+	public function __construct(String $prefix, Int $hour=24)
 	{
 		if(null == parent::$path){
 			throw new Exception(
-				"FileCache path 'Kodeio\FileCache::\$path' is not set."
+				"Cache path 'Kodeio\FileCache::\$path' is not set."
 			); 
 		}
-		if(false == is_array($prefixes)){
-			$prefixes = [$prefixes];
-		}
-		
-		if($table = @$prefixes[0]){
-			if(in_array($table, parent::$tables)){
-				throw new Exception(
-					"The table/prefix '{$table}' already in use."
-				);
-			}
-			parent::$tables[] = $table;
-			$this->prefix = @$prefixes[1];
-			$this->table = $table;
-			$this->hour = $hour;
-		}else{
+		if(in_array($prefix, parent::$prefixes)){
 			throw new Exception(
-				"The cache prefix(s) is/are invalid."
+				"The prefix '{$prefix}' already in use."
 			);
 		}
+
+		parent::$prefixes[] = $prefix;
+		$this->prefix = $prefix; 
+		$this->hour = $hour;
 	}
-	
+
 	/* @return - Nr. of char written or FALSE */
 	public function set(String $recId, $data)
 	{
@@ -46,8 +36,8 @@ class fCache extends FileCache
 			'created_at' => strtotime('now'), 
 		]));
 	}
-	
-	public function get(String $recId, Closure $source=null, $del=true)
+
+	public function get(String $recId, Closure $source=null, bool $del=true)
 	{
 		$file = $this->fname($recId);
 		if(true == file_exists($file)){
@@ -61,7 +51,7 @@ class fCache extends FileCache
 		}
 		return null;
 	}
-	
+
 	public function update($data)
 	{
 		if(null !== $this->file){
@@ -73,8 +63,8 @@ class fCache extends FileCache
 		}
 		return null;
 	}
-	
-	public function delete($recId=null)
+
+	public function delete(String $recId=null)
 	{
 		if(null == $recId){
 			$recId = @$this->id;
@@ -86,7 +76,7 @@ class fCache extends FileCache
 		}
 		return null;
 	}
-	
+
 	public function isExpired()
 	{
 		if(null !== $this->file){ 
